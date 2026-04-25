@@ -298,7 +298,7 @@ function Vocabulary() {
               className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-4 text-white text-center cursor-pointer hover:scale-105 transition-transform duration-200"
               style={{ animationDelay: `${index * 50}ms` }}
             >
-              <p className="text-2xl font-bold mb-1">{word.chinese}</p>
+              <p className="text-2xl font-bold mb-1 chinese-handwriting">{word.chinese}</p>
               <p className="text-sm text-indigo-200">{word.pinyin}</p>
               <p className="text-xs mt-2 text-indigo-100">{word.korean}</p>
             </div>
@@ -381,7 +381,7 @@ function Vocabulary() {
           >
             <div className="text-center text-white">
               <p className="text-3xl text-indigo-200 mb-4">{currentWord.pinyin}</p>
-              <p className="text-6xl font-bold">{currentWord.chinese}</p>
+              <p className="text-6xl font-bold chinese-handwriting">{currentWord.chinese}</p>
             </div>
           </div>
           
@@ -939,7 +939,7 @@ function HandwritingCanvas() {
             <p className="text-5xl font-bold text-indigo-800 mb-2">{currentWord.pinyin}</p>
             {showAnswer && (
               <div className="mt-4">
-                <p className="text-2xl font-bold text-green-600">{currentWord.character}</p>
+                <p className="text-2xl font-bold text-green-600 chinese-handwriting">{currentWord.character}</p>
                 <p className="text-gray-600">{currentWord.meaning}</p>
                 {!userSelfEval && (
                   <div className="mt-4 flex justify-center gap-4">
@@ -1188,7 +1188,7 @@ function WrongAnswerNote() {
             <p className="text-5xl font-bold text-indigo-800 mb-2">{currentWord.pinyin}</p>
             {showAnswer && (
               <div className="mt-4">
-                <p className="text-2xl font-bold text-green-600">{currentWord.character}</p>
+                <p className="text-2xl font-bold text-green-600 chinese-handwriting">{currentWord.character}</p>
                 <p className="text-gray-600">{currentWord.meaning}</p>
                 <p className="text-gray-500 text-sm mt-1">{currentWord.unit}단원</p>
               </div>
