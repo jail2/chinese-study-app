@@ -1,4 +1,4 @@
-const { useState, useRef, useEffect } = React
+import { useState, useRef, useEffect } from 'react'
 
 // Vocabulary Component
 const vocabularyData = {
@@ -1387,5 +1387,4 @@ function App() {
   )
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(<App />)
+export default App
