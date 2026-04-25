@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Ma Shan Zheng';
-  src: url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+  font-family: 'ZCOOL XiaoWei';
+  src: url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');
 }
 
 .chinese-handwriting {
-  font-family: 'Ma Shan Zheng', cursive;
+  font-family: 'ZCOOL XiaoWei', serif;
   font-weight: 400;
 }
