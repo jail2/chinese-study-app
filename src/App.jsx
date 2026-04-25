@@ -803,7 +803,10 @@ function HandwritingCanvas() {
 
     setShuffledBatchWords(shuffled)
     setCurrentWordIndex(0)
-    pickNextWord()
+    setCurrentWord(shuffled[0] || null)
+    setShowAnswer(false)
+    setUserSelfEval(null)
+    clearCanvas()
   }
 
   const pickNextWord = () => {
