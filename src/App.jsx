@@ -754,6 +754,7 @@ const unitsData = {
 function HandwritingCanvas() {
   const canvasRef = useRef(null)
   const [selectedUnit, setSelectedUnit] = useState(1)
+  const [selectedBatch, setSelectedBatch] = useState(0)
   const [currentWord, setCurrentWord] = useState(null)
   const [showAnswer, setShowAnswer] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
@@ -782,12 +783,22 @@ function HandwritingCanvas() {
 
   useEffect(() => {
     pickRandomWord()
-  }, [selectedUnit])
+  }, [selectedUnit, selectedBatch])
 
   const pickRandomWord = () => {
     const words = unitsData[selectedUnit]
-    const randomIndex = Math.floor(Math.random() * words.length)
-    setCurrentWord(words[randomIndex])
+    const batchSize = 20
+    const startIndex = selectedBatch * batchSize
+    const endIndex = Math.min(startIndex + batchSize, words.length)
+    const batchWords = words.slice(startIndex, endIndex)
+    
+    if (batchWords.length === 0) {
+      setCurrentWord(null)
+      return
+    }
+    
+    const randomIndex = Math.floor(Math.random() * batchWords.length)
+    setCurrentWord(batchWords[randomIndex])
     setShowAnswer(false)
     setUserSelfEval(null)
     clearCanvas()
@@ -894,21 +905,24 @@ function HandwritingCanvas() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
+      <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 text-center">
         ✍️ 손글씨 한자 퀴즈
       </h2>
 
-      <div className="mb-6">
-        <label className="block text-gray-700 font-semibold mb-2">
+      <div className="mb-4 md:mb-6">
+        <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
           단원 선택:
         </label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-4">
           {[1, 2, 3].map(unit => (
             <button
               key={unit}
-              onClick={() => setSelectedUnit(unit)}
-              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-colors ${
+              onClick={() => {
+                setSelectedUnit(unit)
+                setSelectedBatch(0)
+              }}
+              className={`flex-1 px-3 py-3 md:px-4 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
                 selectedUnit === unit
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -918,6 +932,36 @@ function HandwritingCanvas() {
             </button>
           ))}
         </div>
+
+        {(() => {
+          const words = unitsData[selectedUnit]
+          const totalBatches = Math.ceil(words.length / 20)
+          if (totalBatches > 1) {
+            return (
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
+                  세트 선택 (20개씩):
+                </label>
+                <div className="flex gap-2 flex-wrap">
+                  {Array.from({ length: totalBatches }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedBatch(i)}
+                      className={`px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold transition-colors text-sm md:text-base ${
+                        selectedBatch === i
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {i + 1}세트
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+          return null
+        })()}
       </div>
 
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6">
