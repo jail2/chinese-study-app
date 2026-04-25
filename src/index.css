@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'ZCOOL XiaoWei';
-  src: url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');
+  font-family: 'Noto Sans SC';
+  src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
 }
 
 .chinese-handwriting {
-  font-family: 'ZCOOL XiaoWei', serif;
+  font-family: 'Noto Sans SC', sans-serif;
   font-weight: 400;
 }
