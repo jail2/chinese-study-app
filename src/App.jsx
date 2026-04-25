@@ -211,13 +211,17 @@ function Vocabulary() {
   }
 
   const nextCard = () => {
-    setCurrentIndex((prev) => (prev + 1) % currentBatchWords.length)
-    setFlipped(false)
+    if (currentIndex < currentBatchWords.length - 1) {
+      setCurrentIndex((prev) => prev + 1)
+      setFlipped(false)
+    }
   }
 
   const prevCard = () => {
-    setCurrentIndex((prev) => (prev - 1 + currentBatchWords.length) % currentBatchWords.length)
-    setFlipped(false)
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1)
+      setFlipped(false)
+    }
   }
 
   const toggleFlip = () => setFlipped(!flipped)
@@ -398,13 +402,23 @@ function Vocabulary() {
       <div className="flex justify-center gap-4 mb-6">
         <button
           onClick={prevCard}
-          className="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-lg font-semibold transition-colors"
+          disabled={currentIndex === 0}
+          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            currentIndex === 0
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+          }`}
         >
           ← 이전
         </button>
         <button
           onClick={nextCard}
-          className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors"
+          disabled={currentIndex === currentBatchWords.length - 1}
+          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            currentIndex === currentBatchWords.length - 1
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+          }`}
         >
           다음 →
         </button>
