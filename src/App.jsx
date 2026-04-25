@@ -755,6 +755,7 @@ function HandwritingCanvas() {
   const canvasRef = useRef(null)
   const [selectedUnit, setSelectedUnit] = useState(1)
   const [selectedBatch, setSelectedBatch] = useState(0)
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentWord, setCurrentWord] = useState(null)
   const [showAnswer, setShowAnswer] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
@@ -782,23 +783,23 @@ function HandwritingCanvas() {
   }, [])
 
   useEffect(() => {
-    pickRandomWord()
+    setCurrentWordIndex(0)
+    pickNextWord()
   }, [selectedUnit, selectedBatch])
 
-  const pickRandomWord = () => {
+  const pickNextWord = () => {
     const words = unitsData[selectedUnit]
     const batchSize = 20
     const startIndex = selectedBatch * batchSize
     const endIndex = Math.min(startIndex + batchSize, words.length)
     const batchWords = words.slice(startIndex, endIndex)
-    
-    if (batchWords.length === 0) {
+
+    if (batchWords.length === 0 || currentWordIndex >= batchWords.length) {
       setCurrentWord(null)
       return
     }
-    
-    const randomIndex = Math.floor(Math.random() * batchWords.length)
-    setCurrentWord(batchWords[randomIndex])
+
+    setCurrentWord(batchWords[currentWordIndex])
     setShowAnswer(false)
     setUserSelfEval(null)
     clearCanvas()
@@ -892,16 +893,31 @@ function HandwritingCanvas() {
         localStorage.setItem('wrongAnswers', JSON.stringify(wrongAnswers))
       }
     }
+
+    // 1초 후 다음 단어로 이동
+    setTimeout(() => {
+      nextWord()
+    }, 1000)
   }
 
   const nextWord = () => {
-    pickRandomWord()
+    const words = unitsData[selectedUnit]
+    const batchSize = 20
+    const startIndex = selectedBatch * batchSize
+    const endIndex = Math.min(startIndex + batchSize, words.length)
+    const batchWords = words.slice(startIndex, endIndex)
+
+    if (currentWordIndex < batchWords.length - 1) {
+      setCurrentWordIndex(prev => prev + 1)
+      pickNextWord()
+    }
   }
 
   const resetProgress = () => {
     setScore(0)
     setTotalAttempts(0)
-    pickRandomWord()
+    setCurrentWordIndex(0)
+    pickNextWord()
   }
 
   return (
@@ -967,14 +983,17 @@ function HandwritingCanvas() {
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <div className="text-gray-700">
+            <span className="font-semibold">진행:</span> {currentWordIndex + 1} / {(() => {
+              const words = unitsData[selectedUnit]
+              const batchSize = 20
+              const startIndex = selectedBatch * batchSize
+              const endIndex = Math.min(startIndex + batchSize, words.length)
+              return endIndex - startIndex
+            })()}
+          </div>
+          <div className="text-gray-700">
             <span className="font-semibold">점수:</span> {score} / {totalAttempts}
           </div>
-          <button
-            onClick={resetProgress}
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm font-semibold transition-colors"
-          >
-            초기화
-          </button>
         </div>
 
         {currentWord && (
