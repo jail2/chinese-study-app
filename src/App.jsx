@@ -757,6 +757,7 @@ function HandwritingCanvas() {
   const [selectedBatch, setSelectedBatch] = useState(0)
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentWord, setCurrentWord] = useState(null)
+  const [shuffledBatchWords, setShuffledBatchWords] = useState([])
   const [showAnswer, setShowAnswer] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
   const [lastX, setLastX] = useState(0)
@@ -783,23 +784,35 @@ function HandwritingCanvas() {
   }, [])
 
   useEffect(() => {
-    setCurrentWordIndex(0)
-    pickNextWord()
+    shuffleBatchWords()
   }, [selectedUnit, selectedBatch])
 
-  const pickNextWord = () => {
+  const shuffleBatchWords = () => {
     const words = unitsData[selectedUnit]
     const batchSize = 20
     const startIndex = selectedBatch * batchSize
     const endIndex = Math.min(startIndex + batchSize, words.length)
     const batchWords = words.slice(startIndex, endIndex)
 
-    if (batchWords.length === 0 || currentWordIndex >= batchWords.length) {
+    // Fisher-Yates shuffle
+    const shuffled = [...batchWords]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+
+    setShuffledBatchWords(shuffled)
+    setCurrentWordIndex(0)
+    pickNextWord()
+  }
+
+  const pickNextWord = () => {
+    if (shuffledBatchWords.length === 0 || currentWordIndex >= shuffledBatchWords.length) {
       setCurrentWord(null)
       return
     }
 
-    setCurrentWord(batchWords[currentWordIndex])
+    setCurrentWord(shuffledBatchWords[currentWordIndex])
     setShowAnswer(false)
     setUserSelfEval(null)
     clearCanvas()
@@ -901,13 +914,7 @@ function HandwritingCanvas() {
   }
 
   const nextWord = () => {
-    const words = unitsData[selectedUnit]
-    const batchSize = 20
-    const startIndex = selectedBatch * batchSize
-    const endIndex = Math.min(startIndex + batchSize, words.length)
-    const batchWords = words.slice(startIndex, endIndex)
-
-    if (currentWordIndex < batchWords.length - 1) {
+    if (currentWordIndex < shuffledBatchWords.length - 1) {
       setCurrentWordIndex(prev => prev + 1)
       pickNextWord()
     }
@@ -916,8 +923,7 @@ function HandwritingCanvas() {
   const resetProgress = () => {
     setScore(0)
     setTotalAttempts(0)
-    setCurrentWordIndex(0)
-    pickNextWord()
+    shuffleBatchWords()
   }
 
   return (
@@ -983,13 +989,7 @@ function HandwritingCanvas() {
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <div className="text-gray-700">
-            <span className="font-semibold">진행:</span> {currentWordIndex + 1} / {(() => {
-              const words = unitsData[selectedUnit]
-              const batchSize = 20
-              const startIndex = selectedBatch * batchSize
-              const endIndex = Math.min(startIndex + batchSize, words.length)
-              return endIndex - startIndex
-            })()}
+            <span className="font-semibold">진행:</span> {currentWordIndex + 1} / {shuffledBatchWords.length}
           </div>
           <div className="text-gray-700">
             <span className="font-semibold">점수:</span> {score} / {totalAttempts}
