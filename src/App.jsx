@@ -309,23 +309,23 @@ function Vocabulary() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="bg-white rounded-2xl shadow-xl p-4 md:p-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">
+      <div className="flex justify-between items-center mb-4 md:mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">
           중단어 플래시카드
         </h2>
         <button
           onClick={handleShuffle}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
+          className="px-3 py-2 md:px-4 md:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
         >
           🔀 섞기
         </button>
       </div>
 
       {/* Unit & Batch Selection */}
-      <div className="mb-6">
-        <label className="block text-gray-700 font-semibold mb-2">
+      <div className="mb-4 md:mb-6">
+        <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
           단원 선택:
         </label>
         <div className="flex gap-2 mb-4">
@@ -333,7 +333,7 @@ function Vocabulary() {
             <button
               key={unit}
               onClick={() => setSelectedUnit(unit)}
-              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-colors ${
+              className={`flex-1 px-3 py-3 md:px-4 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
                 selectedUnit === unit
                   ? 'bg-indigo-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -346,7 +346,7 @@ function Vocabulary() {
 
         {totalBatches > 1 && (
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
               세트 선택 (20개씩):
             </label>
             <div className="flex gap-2 flex-wrap">
@@ -354,7 +354,7 @@ function Vocabulary() {
                 <button
                   key={i}
                   onClick={() => setSelectedBatch(i)}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                  className={`px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold transition-colors text-sm md:text-base ${
                     selectedBatch === i
                       ? 'bg-indigo-600 text-white'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -369,8 +369,8 @@ function Vocabulary() {
       </div>
       
       {/* Flashcard */}
-      <div 
-        className="relative h-72 mb-6 cursor-pointer perspective-1000"
+      <div
+        className="relative h-56 md:h-72 mb-4 md:mb-6 cursor-pointer perspective-1000"
         onClick={toggleFlip}
       >
         <div className="relative w-full h-full">
@@ -380,18 +380,18 @@ function Vocabulary() {
             }`}
           >
             <div className="text-center text-white">
-              <p className="text-3xl text-indigo-200 mb-4">{currentWord.pinyin}</p>
-              <p className="text-6xl font-bold chinese-handwriting">{currentWord.chinese}</p>
+              <p className="text-2xl md:text-3xl text-indigo-200 mb-4">{currentWord.pinyin}</p>
+              <p className="text-4xl md:text-6xl font-bold chinese-handwriting">{currentWord.chinese}</p>
             </div>
           </div>
-          
+
           <div
             className={`absolute w-full h-full bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 ${
               flipped ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
             <div className="text-center text-white">
-              <p className="text-5xl font-bold mb-4">{currentWord.korean}</p>
+              <p className="text-4xl md:text-5xl font-bold mb-4">{currentWord.korean}</p>
               <p className="text-xl text-green-200">클릭해서 뒤집기</p>
             </div>
           </div>
@@ -399,11 +399,11 @@ function Vocabulary() {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-center gap-4 mb-6">
+      <div className="flex justify-center gap-3 md:gap-4 mb-4 md:mb-6">
         <button
           onClick={prevCard}
           disabled={currentIndex === 0}
-          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+          className={`px-4 py-4 md:px-6 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
             currentIndex === 0
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -414,7 +414,7 @@ function Vocabulary() {
         <button
           onClick={nextCard}
           disabled={currentIndex === currentBatchWords.length - 1}
-          className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+          className={`px-4 py-4 md:px-6 md:py-3 rounded-lg font-semibold transition-colors text-sm md:text-base ${
             currentIndex === currentBatchWords.length - 1
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
               : 'bg-indigo-600 hover:bg-indigo-700 text-white'
@@ -979,7 +979,7 @@ function HandwritingCanvas() {
       <div className="mb-4">
         <canvas
           ref={canvasRef}
-          className="w-full h-64 border-4 border-gray-300 rounded-xl bg-white cursor-crosshair touch-none"
+          className="w-full h-48 md:h-64 border-4 border-gray-300 rounded-xl bg-white cursor-crosshair touch-none"
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}
@@ -990,24 +990,24 @@ function HandwritingCanvas() {
         />
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         <button
           onClick={clearCanvas}
-          className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors"
+          className="flex-1 px-4 py-4 md:px-6 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
         >
           🗑️ 지우기
         </button>
         {!showAnswer ? (
           <button
             onClick={checkAnswer}
-            className="flex-1 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors"
+            className="flex-1 px-4 py-4 md:px-6 md:py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
           >
             정답 확인
           </button>
         ) : (
           <button
             onClick={nextWord}
-            className="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors"
+            className="flex-1 px-4 py-4 md:px-6 md:py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
           >
             다음 문제 →
           </button>
@@ -1199,7 +1199,7 @@ function WrongAnswerNote() {
         <div className="mb-4">
           <canvas
             ref={canvasRef}
-            className="w-full h-64 border-4 border-gray-300 rounded-xl bg-white cursor-crosshair touch-none"
+            className="w-full h-48 md:h-64 border-4 border-gray-300 rounded-xl bg-white cursor-crosshair touch-none"
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
@@ -1210,17 +1210,17 @@ function WrongAnswerNote() {
           />
         </div>
 
-        <div className="flex gap-4 mb-4">
+        <div className="flex gap-3 mb-4">
           <button
             onClick={clearCanvas}
-            className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors"
+            className="flex-1 px-4 py-4 md:px-6 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
           >
             🗑️ 지우기
           </button>
           {!showAnswer ? (
             <button
               onClick={() => setShowAnswer(true)}
-              className="flex-1 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors"
+              className="flex-1 px-4 py-4 md:px-6 md:py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors text-sm md:text-base"
             >
               정답 확인
             </button>
@@ -1228,15 +1228,15 @@ function WrongAnswerNote() {
             <>
               <button
                 onClick={() => removeFromWrongAnswers(currentWord.character)}
-                className="flex-1 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors"
+                className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
-                ✅ 완벽했어요 (삭제)
+                ✅ 완벽
               </button>
               <button
                 onClick={() => removeFromWrongAnswers(currentWord.character)}
-                className="flex-1 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors"
+                className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
-                ❌ 아직 어려워요 (유지)
+                ❌ 어려워
               </button>
             </>
           )}
