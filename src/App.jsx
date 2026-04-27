@@ -1084,7 +1084,8 @@ function WrongAnswerNote() {
 
   const nextReview = () => {
     if (reviewIndex < wrongAnswers.length - 1) {
-      setReviewIndex(prev => prev + 1)
+      const nextIndex = reviewIndex + 1
+      setReviewIndex(nextIndex)
       setShowAnswer(false)
       clearCanvas()
     }
@@ -1151,13 +1152,19 @@ function WrongAnswerNote() {
           ) : (
             <>
               <button
-                onClick={() => removeFromWrongAnswers(currentWord.character || currentWord.chinese)}
+                onClick={() => {
+                  removeFromWrongAnswers(currentWord.character || currentWord.chinese)
+                  nextReview()
+                }}
                 className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
                 ✅ 완벽
               </button>
               <button
-                onClick={() => removeFromWrongAnswers(currentWord.character || currentWord.chinese)}
+                onClick={() => {
+                  removeFromWrongAnswers(currentWord.character || currentWord.chinese)
+                  nextReview()
+                }}
                 className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
                 ❌ 어려워
