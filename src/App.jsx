@@ -751,10 +751,15 @@ function HandwritingCanvas() {
     } else {
       // 틀린 단어를 오답노트에 저장
       const wrongAnswers = JSON.parse(localStorage.getItem('wrongAnswers') || '[]')
-      const alreadyExists = wrongAnswers.some(w => w.character === currentWord.character)
+      const wordId = currentWord.character || currentWord.chinese
+      const alreadyExists = wrongAnswers.some(w => (w.character || w.chinese) === wordId)
       if (!alreadyExists) {
         wrongAnswers.push({
-          ...currentWord,
+          character: currentWord.character || currentWord.chinese,
+          chinese: currentWord.chinese || currentWord.character,
+          pinyin: currentWord.pinyin,
+          meaning: currentWord.meaning || currentWord.korean,
+          korean: currentWord.korean || currentWord.meaning,
           wrongDate: new Date().toISOString(),
           unit: selectedUnit
         })
@@ -1045,7 +1050,7 @@ function WrongAnswerNote() {
   }
 
   const removeFromWrongAnswers = (character) => {
-    const updated = wrongAnswers.filter(w => w.character !== character)
+    const updated = wrongAnswers.filter(w => (w.character || w.chinese) !== character)
     setWrongAnswers(updated)
     localStorage.setItem('wrongAnswers', JSON.stringify(updated))
     if (reviewIndex >= updated.length) {
@@ -1106,8 +1111,8 @@ function WrongAnswerNote() {
             <p className="text-5xl font-bold text-indigo-800 mb-2">{currentWord.pinyin}</p>
             {showAnswer && (
               <div className="mt-4">
-                <p className="text-2xl font-bold text-green-600 chinese-handwriting">{currentWord.character}</p>
-                <p className="text-gray-600">{currentWord.meaning}</p>
+                <p className="text-2xl font-bold text-green-600 chinese-handwriting">{currentWord.character || currentWord.chinese}</p>
+                <p className="text-gray-600">{currentWord.meaning || currentWord.korean}</p>
                 <p className="text-gray-500 text-sm mt-1">{currentWord.unit}단원</p>
               </div>
             )}
@@ -1145,13 +1150,13 @@ function WrongAnswerNote() {
           ) : (
             <>
               <button
-                onClick={() => removeFromWrongAnswers(currentWord.character)}
+                onClick={() => removeFromWrongAnswers(currentWord.character || currentWord.chinese)}
                 className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
                 ✅ 완벽
               </button>
               <button
-                onClick={() => removeFromWrongAnswers(currentWord.character)}
+                onClick={() => removeFromWrongAnswers(currentWord.character || currentWord.chinese)}
                 className="flex-1 px-3 py-4 md:px-6 md:py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors text-xs md:text-base"
               >
                 ❌ 어려워
@@ -1230,19 +1235,19 @@ function WrongAnswerNote() {
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {wrongAnswers.map((word, index) => (
               <div
-                key={word.character}
+                key={word.character || word.chinese}
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl font-bold text-indigo-800">{word.character}</span>
+                  <span className="text-2xl font-bold text-indigo-800">{word.character || word.chinese}</span>
                   <div>
                     <p className="font-semibold text-gray-800">{word.pinyin}</p>
-                    <p className="text-sm text-gray-600">{word.meaning}</p>
+                    <p className="text-sm text-gray-600">{word.meaning || word.korean}</p>
                     <p className="text-xs text-gray-400">{word.unit}단원</p>
                   </div>
                 </div>
                 <button
-                  onClick={() => removeFromWrongAnswers(word.character)}
+                  onClick={() => removeFromWrongAnswers(word.character || word.chinese)}
                   className="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold transition-colors"
                 >
                   삭제
