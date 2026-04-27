@@ -1052,11 +1052,14 @@ function WrongAnswerNote() {
 
   const removeFromWrongAnswers = (character) => {
     const updated = wrongAnswers.filter(w => (w.character || w.chinese) !== character)
-    setWrongAnswers(updated)
-    localStorage.setItem('wrongAnswers', JSON.stringify(updated))
-    if (reviewIndex >= updated.length) {
-      setReviewIndex(Math.max(0, updated.length - 1))
+    const newLength = updated.length
+    let newIndex = reviewIndex
+    if (reviewIndex >= newLength) {
+      newIndex = Math.max(0, newLength - 1)
     }
+    setWrongAnswers(updated)
+    setReviewIndex(newIndex)
+    localStorage.setItem('wrongAnswers', JSON.stringify(updated))
   }
 
   const clearAllWrongAnswers = () => {
@@ -1101,6 +1104,12 @@ function WrongAnswerNote() {
 
   if (reviewMode && wrongAnswers.length > 0) {
     const currentWord = wrongAnswers[reviewIndex]
+    if (!currentWord) {
+      setReviewIndex(0)
+      setShowAnswer(false)
+      clearCanvas()
+      return null
+    }
     return (
       <div className="bg-white rounded-2xl shadow-xl p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
