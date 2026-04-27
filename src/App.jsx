@@ -775,8 +775,9 @@ function HandwritingCanvas() {
 
   const nextWord = () => {
     if (currentWordIndex < shuffledBatchWords.length - 1) {
-      setCurrentWordIndex(prev => prev + 1)
-      pickNextWord()
+      const nextIndex = currentWordIndex + 1
+      setCurrentWordIndex(nextIndex)
+      pickNextWordAtIndex(nextIndex)
     }
   }
 
