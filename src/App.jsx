@@ -653,22 +653,24 @@ function HandwritingCanvas() {
 
     setShuffledBatchWords(shuffled)
     setCurrentWordIndex(0)
-    setCurrentWord(shuffled[0] || null)
+    pickNextWordAtIndex(0, shuffled)
+  }
+
+  const pickNextWordAtIndex = (index, words) => {
+    const wordList = words || shuffledBatchWords
+    if (wordList.length === 0 || index >= wordList.length) {
+      setCurrentWord(null)
+      return
+    }
+
+    setCurrentWord(wordList[index])
     setShowAnswer(false)
     setUserSelfEval(null)
     clearCanvas()
   }
 
   const pickNextWord = () => {
-    if (shuffledBatchWords.length === 0 || currentWordIndex >= shuffledBatchWords.length) {
-      setCurrentWord(null)
-      return
-    }
-
-    setCurrentWord(shuffledBatchWords[currentWordIndex])
-    setShowAnswer(false)
-    setUserSelfEval(null)
-    clearCanvas()
+    pickNextWordAtIndex(currentWordIndex)
   }
 
   const getCoordinates = (e) => {
