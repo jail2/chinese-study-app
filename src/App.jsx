@@ -637,6 +637,27 @@ function HandwritingCanvas() {
     shuffleBatchWords()
   }, [selectedUnit, selectedBatch])
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        if (currentWordIndex < shuffledBatchWords.length - 1) {
+          const nextIndex = currentWordIndex + 1
+          setCurrentWordIndex(nextIndex)
+          pickNextWordAtIndex(nextIndex)
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentWordIndex > 0) {
+          const prevIndex = currentWordIndex - 1
+          setCurrentWordIndex(prevIndex)
+          pickNextWordAtIndex(prevIndex)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentWordIndex, shuffledBatchWords])
+
   const shuffleBatchWords = () => {
     const words = unitsData[selectedUnit]
     const batchSize = 20
